@@ -5,3 +5,7 @@ a simple app that:
 - uses "modifier" function to modify the size and padding of objects
 - uses vector asset baseline_person_24 in place of a person's image
 - used "Row" to place items in a row
+
+- used a data class to store and manage data
+- added firstName, lastName and age items in data class
+- used 'people.filtered' function to filter values based on age
