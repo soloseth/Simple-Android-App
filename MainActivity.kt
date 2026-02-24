@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -27,7 +28,17 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        val people = listOf("Alice", "Bob", "Carol", "David", "Eve","Alice", "Bob", "Carol", "David", "Eve","Alice", "Bob", "Carol", "David", "Eve")
+        val people = listOf(
+            person("John", "Doe", 30),
+            person("Jane", "Doe", 25),
+            person("Bob", "Smith", 10),
+            person("John", "Doe", 30),
+            person("Jane", "Doe", 18),
+            person("Bob", "Smith", 20)
+        )
+
+        val peopleFiltered = people.filter { it.age > 21 }
+
 
         setContent {
             TipperTheme {
@@ -37,8 +48,8 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier.padding(innerPadding)
                     )
                     LazyColumn {
-                        items(people) { person ->
-                            ListItem(person)
+                        items(peopleFiltered) {
+                            CardView(it)
                         }
                     }
                 }
@@ -64,7 +75,7 @@ fun GreetingPreview() {
 }
 
 @Composable
-fun ListItem(name: String) {
+fun CardView(person: person) {
     Card(
         modifier = Modifier.padding(16.dp).fillMaxSize()
     ) {
@@ -74,10 +85,21 @@ fun ListItem(name: String) {
                 contentDescription = null,
                 modifier = Modifier.width(100.dp).height(100.dp)
             )
-            Text(
-                modifier = Modifier.fillMaxSize().padding(24.dp),
-                text = name
-            )
+            Column {
+                Text(
+                    modifier = Modifier.padding(top = 16.dp),
+                    text = person.firstName
+                )
+                Text(
+                    modifier = Modifier.padding(0.dp),
+                    text = person.lastName
+                )
+                Text(
+                    modifier = Modifier.padding(0.dp),
+                    text = "Age: " + person.age
+                )
+            }
+
         }
     }
 }
