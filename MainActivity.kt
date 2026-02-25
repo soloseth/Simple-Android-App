@@ -28,16 +28,28 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        val people = listOf(
-            person("John", "Doe", 30),
-            person("Jane", "Doe", 25),
-            person("Bob", "Smith", 10),
-            person("John", "Doe", 30),
-            person("Jane", "Doe", 18),
-            person("Bob", "Smith", 20)
-        )
+//        val people = listOf(
+//            person("John", "Doe", 30),
+  //          person("Jane", "Doe", 25),
+    //        person("Bob", "Smith", 10),
+//            person("John", "Doe", 30),
+//            person("Jane", "Doe", 18),
+//            person("Bob", "Smith", 20)
+//        )
 
-        val peopleFiltered = people.filter { it.age > 21 }
+  //      val peopleFiltered = people.filter { it.age > 21 }
+
+        val rssItems = listOf(
+            RSSitem("Welcome to my blog!", "Text 1", RSSType.TEXT),
+            RSSitem("Welcome to my blog!", "Text 1", RSSType.VIDEO),
+            RSSitem("Welcome to my blog!", "Text 1", RSSType.IMAGE),
+            RSSitem("Welcome to my blog!", "Text 1", RSSType.TEXT),
+            RSSitem("Welcome to my blog!", "Text 1", RSSType.VIDEO),
+            RSSitem("Welcome to my blog!", "Text 1", RSSType.IMAGE),
+            RSSitem("Welcome to my blog!", "Text 1", RSSType.TEXT),
+            RSSitem("Welcome to my blog!", "Text 1", RSSType.VIDEO),
+
+        )
 
 
         setContent {
@@ -48,8 +60,14 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier.padding(innerPadding)
                     )
                     LazyColumn {
-                        items(peopleFiltered) {
-                            CardView(it)
+                        items(rssItems) {
+                            if (it.type == RSSType.TEXT) {
+                                RSSItemText(it)
+                            } else if (it.type == RSSType.VIDEO) {
+                                RSSItemVideo(it)
+                            } else if (it.type == RSSType.IMAGE) {
+                                RSSItemImage(it)
+                            }
                         }
                     }
                 }
@@ -101,5 +119,51 @@ fun CardView(person: person) {
             }
 
         }
+    }
+}
+
+@Composable
+fun RSSItemText(rssItem: RSSitem) {
+    Card(
+        modifier = Modifier.padding(16.dp).fillMaxSize()
+    ) {
+        Text(
+            modifier = Modifier.padding(24.dp),
+            text = rssItem.title
+        )
+    }
+}
+
+@Composable
+fun RSSItemVideo(rssItem: RSSitem) {
+    Card(
+        modifier = Modifier.padding(16.dp).fillMaxSize()
+    ) {
+        Text(
+            modifier = Modifier.padding(24.dp),
+            text = "Click here to play video"
+        )
+        Image(
+            painter = painterResource(id = R.drawable.baseline_person_24),
+            contentDescription = null,
+            modifier = Modifier.width(300.dp).height(300.dp)
+        )
+    }
+}
+
+@Composable
+fun RSSItemImage(rssItem: RSSitem) {
+    Card(
+        modifier = Modifier.padding(16.dp).fillMaxSize()
+    ) {
+        Text(
+            modifier = Modifier.padding(24.dp),
+            text = "Photo below: "
+        )
+        Image(
+            painter = painterResource(id = R.drawable.baseline_person_24),
+            contentDescription = null,
+            modifier = Modifier.width(300.dp).height(300.dp)
+        )
     }
 }
