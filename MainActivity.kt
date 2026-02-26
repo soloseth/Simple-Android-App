@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,8 +20,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.tipper.ui.theme.TipperTheme
 
 class MainActivity : ComponentActivity() {
@@ -40,14 +43,9 @@ class MainActivity : ComponentActivity() {
   //      val peopleFiltered = people.filter { it.age > 21 }
 
         val rssItems = listOf(
-            RSSitem("Welcome to my blog!", "Text 1", RSSType.TEXT),
-            RSSitem("Welcome to my blog!", "Text 1", RSSType.VIDEO),
-            RSSitem("Welcome to my blog!", "Text 1", RSSType.IMAGE),
-            RSSitem("Welcome to my blog!", "Text 1", RSSType.TEXT),
-            RSSitem("Welcome to my blog!", "Text 1", RSSType.VIDEO),
-            RSSitem("Welcome to my blog!", "Text 1", RSSType.IMAGE),
-            RSSitem("Welcome to my blog!", "Text 1", RSSType.TEXT),
-            RSSitem("Welcome to my blog!", "Text 1", RSSType.VIDEO),
+            RSSitem("Welcome to Austin, Texas! We have music!", "There is lots of music here in Austin, Texas.", RSSType.TEXT),
+            RSSitem("Welcome to my photo gallery. View photos", "Click here to view photos", RSSType.IMAGE,  R.drawable.istockphoto),
+            RSSitem("Press conference happening now", "Click here to watch live", RSSType.VIDEO, R.drawable.shutterstock)
 
         )
 
@@ -61,12 +59,16 @@ class MainActivity : ComponentActivity() {
                     )
                     LazyColumn {
                         items(rssItems) {
-                            if (it.type == RSSType.TEXT) {
-                                RSSItemText(it)
-                            } else if (it.type == RSSType.VIDEO) {
-                                RSSItemVideo(it)
-                            } else if (it.type == RSSType.IMAGE) {
-                                RSSItemImage(it)
+                            when (it.type) {
+                                RSSType.TEXT -> {
+                                    RSSItemText(it)
+                                }
+                                RSSType.VIDEO -> {
+                                    RSSItemVideo(it)
+                                }
+                                RSSType.IMAGE -> {
+                                    RSSItemImage(it)
+                                }
                             }
                         }
                     }
@@ -129,7 +131,14 @@ fun RSSItemText(rssItem: RSSitem) {
     ) {
         Text(
             modifier = Modifier.padding(24.dp),
+            fontSize = 32.sp,
+            lineHeight = 32.sp,
+            fontWeight = FontWeight.Black,
             text = rssItem.title
+        )
+        Text(
+            modifier = Modifier.padding(12.dp),
+            text = rssItem.text
         )
     }
 }
@@ -141,13 +150,22 @@ fun RSSItemVideo(rssItem: RSSitem) {
     ) {
         Text(
             modifier = Modifier.padding(24.dp),
-            text = "Click here to play video"
+            fontSize = 32.sp,
+            lineHeight = 32.sp,
+            fontWeight = FontWeight.Black,
+            text = rssItem.title
         )
-        Image(
-            painter = painterResource(id = R.drawable.baseline_person_24),
-            contentDescription = null,
-            modifier = Modifier.width(300.dp).height(300.dp)
+        Text(
+            modifier = Modifier.padding(16.dp),
+            text = rssItem.text
         )
+        rssItem.media?.let { photo ->
+            Image(
+                painter = painterResource(id = photo),
+                contentDescription = "Photo of Person",
+                modifier = Modifier.fillMaxSize()
+                )
+        }
     }
 }
 
@@ -157,13 +175,25 @@ fun RSSItemImage(rssItem: RSSitem) {
         modifier = Modifier.padding(16.dp).fillMaxSize()
     ) {
         Text(
-            modifier = Modifier.padding(24.dp),
-            text = "Photo below: "
+            modifier = Modifier.padding(24.dp).clickable{
+                println("Clicked")
+            },
+            fontSize = 32.sp,
+            lineHeight = 32.sp,
+            fontWeight = FontWeight.Black,
+            text = rssItem.title
         )
-        Image(
-            painter = painterResource(id = R.drawable.baseline_person_24),
-            contentDescription = null,
-            modifier = Modifier.width(300.dp).height(300.dp)
+        Text(
+            modifier = Modifier.padding(16.dp),
+            text = rssItem.text
         )
+        rssItem.media?.let { photo ->
+            Image(
+                painter = painterResource(id = photo),
+                contentDescription = "Photo of Person",
+                modifier = Modifier.fillMaxSize()
+            )
+        }
     }
 }
+
